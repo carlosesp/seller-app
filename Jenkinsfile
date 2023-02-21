@@ -28,6 +28,7 @@ pipeline {
             steps {
                 withSonarQubeEnv('SonarQubeServer') {
                     sh "${tool name: 'sbt-1.2.3', type: 'org.jvnet.hudson.plugins.SbtPluginBuilder$SbtInstallation'}/bin/sbt jacoco"
+                    sh "${tool name: 'sbt-1.2.3', type: 'org.jvnet.hudson.plugins.SbtPluginBuilder$SbtInstallation'}/bin/sbt sonarScan"
                 }
             }
         }
