@@ -4,18 +4,18 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                sh "${tool name: '1.2.3', type: 'org.jvnet.hudson.plugins.SbtPluginBuilder$SbtInstallation'}/bin/sbt compile"
+                sh "${tool name: 'sbt-1.2.3'} compile"
             }
         }
         stage('Test') {
             steps {
-                sh "${tool name: '1.2.3', type: 'org.jvnet.hudson.plugins.SbtPluginBuilder$SbtInstallation'}/bin/sbt test"
+                sh "${tool name: 'sbt-1.2.3'} test"
             }
         }
         stage('SonarQube analysis') {
             steps {
                 withSonarQubeEnv('SonarQubeServer') {
-                    sh "${tool name: '1.2.3', type: 'org.jvnet.hudson.plugins.SbtPluginBuilder$SbtInstallation'}/bin/sbt jacoco"
+                    sh "${tool name: 'sbt-1.2.3'} jacoco"
                 }
             }
         }
