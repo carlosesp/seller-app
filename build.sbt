@@ -23,8 +23,10 @@ lazy val root = (project in file(".")).settings(jacocoSettings: _*)
 libraryDependencies += "org.scalatest" %% "scalatest" % "3.2.15" % "test"
 
 import sbtsonar.SonarPlugin.autoImport.sonarProperties
+import sbtsonar.SonarPlugin.autoImport.sonarUseSonarScannerCli
 
 sonarProperties ++= Map (
   "sonar.junit.reportPaths"-> "target/test-reports",
   "sonar.scala.coverage.reportPaths"-> "target/scala-2.12/jacoco/report/jacoco.xml"
 )
+sonarUseSonarScannerCli := true

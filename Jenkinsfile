@@ -11,6 +11,7 @@ pipeline {
                 sh '''
                     echo "PATH=${PATH}"
                     echo "JAVA_HOME=${JAVA_HOME}"
+                    echo "SONAR_SCANNER_HOME=${SONAR_SCANNER_HOME}"
                 '''
             }
         }
@@ -22,12 +23,12 @@ pipeline {
         stage('Test') {
             steps {
                 sh "${tool name: 'sbt-1.2.3', type: 'org.jvnet.hudson.plugins.SbtPluginBuilder$SbtInstallation'}/bin/sbt test"
+                sh "${tool name: 'sbt-1.2.3', type: 'org.jvnet.hudson.plugins.SbtPluginBuilder$SbtInstallation'}/bin/sbt jacoco"
             }
         }
         stage('SonarQube analysis') {
             steps {
                 withSonarQubeEnv('SonarQubeServer') {
-                    sh "${tool name: 'sbt-1.2.3', type: 'org.jvnet.hudson.plugins.SbtPluginBuilder$SbtInstallation'}/bin/sbt jacoco"
                     sh "${tool name: 'sbt-1.2.3', type: 'org.jvnet.hudson.plugins.SbtPluginBuilder$SbtInstallation'}/bin/sbt sonarScan"
                 }
             }
