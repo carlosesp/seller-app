@@ -30,11 +30,14 @@ pipeline {
             }
         }
         stage('SonarQube analysis') {
-            step([$class: 'ScoveragePublisher', reportDir: 'target/scala-2.12/scoverage-report', reportFile: 'scoverage.xml']) {
+            steps {
+                    step([$class: 'ScoveragePublisher', reportDir: 'target/scala-2.12/scoverage-report', reportFile: 'scoverage.xml'])
                     sh "${tool name: 'sbt-1.2.3', type: 'org.jvnet.hudson.plugins.SbtPluginBuilder$SbtInstallation'}/bin/sbt \
                       -Dsonar.login=$SONAR_SECRET_TOKEN \
                       sonarScan"
+                    ScoveragePublisher
             }
+
 
         }
     }
