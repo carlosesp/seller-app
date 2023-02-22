@@ -14,8 +14,14 @@ pipeline {
                     echo "SONAR_SCANNER_HOME=${SONAR_SCANNER_HOME}"
                     echo "SONAR_HOST_URL=${SONAR_HOST_URL}"
                     echo "SONAR_LOGIN=${SONAR_LOGIN}"
+                    echo "SONAR_LOGIN=${SONAR_LOGIN}"
                 '''
                 echo sh(script: 'env|sort', returnStdout: true)
+
+                withCredentials([string(credentialsId: 'SONAR_LOGIN', variable: 'sonar_login')])
+                {
+                    echo("My private token is: ${sonar_login}")
+                }
             }
         }
         stage('Build') {
