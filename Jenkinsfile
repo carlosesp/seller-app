@@ -27,9 +27,9 @@ pipeline {
         }
         stage('SonarQube analysis') {
             steps {
-                    sh("""${tool name: 'sbt-1.2.3', type: 'org.jvnet.hudson.plugins.SbtPluginBuilder$SbtInstallation'}/bin/sbt \
+                    sh "${tool name: 'sbt-1.2.3', type: 'org.jvnet.hudson.plugins.SbtPluginBuilder$SbtInstallation'}/bin/sbt \
                       -Dsonar.login=$SONAR_SECRET_TOKEN \
-                      sonarScan""")
+                      sonarScan"
             }
         }
     }
