@@ -33,6 +33,3 @@ sonarProperties ++= Map (
   "sonar.sourceEncoding" -> "UTF-8",
   "sonar.coverage.jacoco.xmlReportPaths"-> "target/scala-2.12/jacoco/report/jacoco.xml"
 )
-
-//import sbtsonar.SonarPlugin.autoImport.sonarUseSonarScannerCli
-//sonarUseSonarScannerCli := true

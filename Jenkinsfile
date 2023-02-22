@@ -10,18 +10,14 @@ pipeline {
     }
 
     stages {
-        stage('Initialize') {
-            steps {
-                sh '''
-                    echo "PATH=${PATH}"
-                    echo "JAVA_HOME=${JAVA_HOME}"
-                '''
-                echo sh(script: 'env|sort', returnStdout: true)
-            }
-        }
         stage('Build') {
             steps {
                 sh "${tool name: 'sbt-1.2.3', type: 'org.jvnet.hudson.plugins.SbtPluginBuilder$SbtInstallation'}/bin/sbt clean compile"
+            }
+            post {
+                success {
+                    junit '**/target/test-reports/*.xml'
+                }
             }
         }
         stage('Test') {
@@ -31,9 +27,9 @@ pipeline {
         }
         stage('SonarQube analysis') {
             steps {
-                    sh "${tool name: 'sbt-1.2.3', type: 'org.jvnet.hudson.plugins.SbtPluginBuilder$SbtInstallation'}/bin/sbt \
+                    sh('''${tool name: 'sbt-1.2.3', type: 'org.jvnet.hudson.plugins.SbtPluginBuilder$SbtInstallation'}/bin/sbt \
                       -Dsonar.login=$SONAR_SECRET_TOKEN \
-                      sonarScan"
+                      sonarScan''')
             }
         }
     }
