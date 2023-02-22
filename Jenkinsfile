@@ -5,6 +5,10 @@ pipeline {
         jdk 'Java-11'
     }
 
+    environment {
+        SONAR_SECRET_TOKEN = credentials('sonar-secret-token')
+    }
+
     stages {
         stage('Initialize') {
             steps {
@@ -17,11 +21,6 @@ pipeline {
                     echo "SONAR_LOGIN=${SONAR_LOGIN}"
                 '''
                 echo sh(script: 'env|sort', returnStdout: true)
-
-                withCredentials([string(credentialsId: 'SONAR_LOGIN', variable: 'sonar_login')])
-                {
-                    echo("My private token is: ${sonar_login}")
-                }
             }
         }
         stage('Build') {
@@ -35,8 +34,11 @@ pipeline {
             }
         }
         stage('SonarQube analysis') {
-            steps {
-                 sh "${tool name: 'sbt-1.2.3', type: 'org.jvnet.hudson.plugins.SbtPluginBuilder$SbtInstallation'}/bin/sbt sonarScan"
+            withSonarQubeEnv('SonarQubeServer') {
+                sh "/var/lib"
+                sh "${tool name: 'sbt-1.2.3', type: 'org.jvnet.hudson.plugins.SbtPluginBuilder$SbtInstallation'}/bin/sbt \
+                  -Dsonar.login=$SONAR_SECRET_TOKEN \
+                  sonarScan"
             }
         }
     }
