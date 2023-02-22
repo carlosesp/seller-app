@@ -12,7 +12,10 @@ pipeline {
                     echo "PATH=${PATH}"
                     echo "JAVA_HOME=${JAVA_HOME}"
                     echo "SONAR_SCANNER_HOME=${SONAR_SCANNER_HOME}"
+                    echo "SONAR_HOST_URL=${SONAR_HOST_URL}"
+                    echo "SONAR_LOGIN=${SONAR_LOGIN}"
                 '''
+                echo sh(script: 'env|sort', returnStdout: true)
             }
         }
         stage('Build') {
@@ -22,15 +25,12 @@ pipeline {
         }
         stage('Test') {
             steps {
-                sh "${tool name: 'sbt-1.2.3', type: 'org.jvnet.hudson.plugins.SbtPluginBuilder$SbtInstallation'}/bin/sbt test"
-                sh "${tool name: 'sbt-1.2.3', type: 'org.jvnet.hudson.plugins.SbtPluginBuilder$SbtInstallation'}/bin/sbt jacoco"
+                sh "${tool name: 'sbt-1.2.3', type: 'org.jvnet.hudson.plugins.SbtPluginBuilder$SbtInstallation'}/bin/sbt coverage test coverageReport"
             }
         }
         stage('SonarQube analysis') {
             steps {
-                withSonarQubeEnv('SonarQubeServer') {
-                    sh "${tool name: 'sbt-1.2.3', type: 'org.jvnet.hudson.plugins.SbtPluginBuilder$SbtInstallation'}/bin/sbt sonarScan"
-                }
+                 sh "${tool name: 'sbt-1.2.3', type: 'org.jvnet.hudson.plugins.SbtPluginBuilder$SbtInstallation'}/bin/sbt sonarScan"
             }
         }
     }
