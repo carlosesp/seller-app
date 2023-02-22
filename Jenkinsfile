@@ -15,10 +15,6 @@ pipeline {
                 sh '''
                     echo "PATH=${PATH}"
                     echo "JAVA_HOME=${JAVA_HOME}"
-                    echo "SONAR_SCANNER_HOME=${SONAR_SCANNER_HOME}"
-                    echo "SONAR_HOST_URL=${SONAR_HOST_URL}"
-                    echo "SONAR_LOGIN=${SONAR_LOGIN}"
-                    echo "SONAR_LOGIN=${SONAR_LOGIN}"
                 '''
                 echo sh(script: 'env|sort', returnStdout: true)
             }
@@ -35,11 +31,9 @@ pipeline {
         }
         stage('SonarQube analysis') {
             steps {
-                withSonarQubeEnv('SonarQubeServer') {
                     sh "${tool name: 'sbt-1.2.3', type: 'org.jvnet.hudson.plugins.SbtPluginBuilder$SbtInstallation'}/bin/sbt \
                       -Dsonar.login=$SONAR_SECRET_TOKEN \
                       sonarScan"
-                }
             }
         }
     }
