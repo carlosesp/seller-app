@@ -14,15 +14,15 @@ pipeline {
             steps {
                 sh "${tool name: 'sbt-1.2.3', type: 'org.jvnet.hudson.plugins.SbtPluginBuilder$SbtInstallation'}/bin/sbt clean compile"
             }
-            post {
-                success {
-                    junit '**/target/test-reports/*.xml'
-                }
-            }
         }
         stage('Test') {
             steps {
                 sh "${tool name: 'sbt-1.2.3', type: 'org.jvnet.hudson.plugins.SbtPluginBuilder$SbtInstallation'}/bin/sbt test jacoco"
+            }
+            post {
+                always {
+                    junit '**/target/test-reports/*.xml'
+                }
             }
         }
         stage('SonarQube analysis') {
