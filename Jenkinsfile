@@ -5,10 +5,6 @@ pipeline {
         jdk 'Java-11'
     }
 
-    environment {
-        SONAR_SECRET_TOKEN = credentials('sonar-secret-token')
-    }
-
     stages {
         stage('Build') {
             steps {
@@ -25,11 +21,10 @@ pipeline {
                 }
             }
         }
-        stage('SonarQube analysis') {
+        stage('SonarQube Analysis') {
             steps {
-                    sh "${tool name: 'sbt-1.2.3', type: 'org.jvnet.hudson.plugins.SbtPluginBuilder$SbtInstallation'}/bin/sbt \
-                      -Dsonar.login=$SONAR_SECRET_TOKEN \
-                      sonarScan"
+            withSonarQubeEnv(installationName: 'SonarQubeScanner', credentialsId: 'sonar-secret-token') {
+                    sh "${tool name: 'sbt-1.2.3', type: 'org.jvnet.hudson.plugins.SbtPluginBuilder$SbtInstallation'}/bin/sbt sonarScan"
             }
         }
     }
