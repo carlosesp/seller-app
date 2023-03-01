@@ -20,7 +20,7 @@ val jacocoSettings = Seq(jacoco, excludes)
 
 lazy val root = (project in file(".")).settings(jacocoSettings: _*)
 
-libraryDependencies += "org.scalatest" %% "scalatest" % "3.2.15" % "test"
+libraryDependencies += "org.scalatest" %% "scalatest" % "3.0.4" % "test"
 
 import sbtsonar.SonarPlugin.autoImport.sonarProperties
 
