@@ -1,12 +1,10 @@
 package pe.carlosesp.demo
 
-import org.scalatest.flatspec.AnyFlatSpec
-import org.scalatest.matchers.must.Matchers
-import org.scalatest.matchers.should.Matchers.convertToAnyShouldWrapper
+import org.scalatest.{FlatSpec, Matchers}
 import pe.carlosesp.demo.seller.BeerSeller
 
 
-class BeerSellerSpec extends AnyFlatSpec with Matchers {
+class BeerSellerSpec extends FlatSpec with Matchers {
 
   "BeerSeller" should "sell beer for an adult" in {
     BeerSeller.getBeer(20) shouldBe "Beer for you"
