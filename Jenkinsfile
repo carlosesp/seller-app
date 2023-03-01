@@ -23,8 +23,9 @@ pipeline {
         }
         stage('SonarQube Analysis') {
             steps {
-            withSonarQubeEnv(installationName: 'SonarQubeScanner', credentialsId: 'sonar-secret-token') {
+                withSonarQubeEnv(installationName: 'SonarQubeScanner', credentialsId: 'sonar-secret-token') {
                     sh "${tool name: 'sbt-1.2.3', type: 'org.jvnet.hudson.plugins.SbtPluginBuilder$SbtInstallation'}/bin/sbt sonarScan"
+                }
             }
         }
     }
